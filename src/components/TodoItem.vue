@@ -3,8 +3,12 @@
     <p>
       <input type="checkbox" v-on:change="markComplete" v-bind:checked="todo.completed" />
       {{todo.title}}
-      <button>Edit</button>
-      <button @click="$emit('del-todo', todo.id)">Delete</button>
+      <font-awesome-icon :icon="['far', 'trash-alt']" class="icons" @click="deleteTodo(todo.id)" />
+      <font-awesome-icon
+        :icon="['far', 'edit']"
+        class="icons"
+        @click="$store.dispatch('editTodo', todo)"
+      />
     </p>
   </div>
 </template>
@@ -17,6 +21,28 @@ export default {
   methods: {
     markComplete() {
       this.todo.completed = !this.todo.completed;
+    },
+    deleteTodo(id) {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        })
+        .then(result => {
+          if (result.value) {
+            this.$store.dispatch("delTodo", id);
+            this.$swal.fire(
+              "Deleted!",
+              "Your todo has been deleted.",
+              "success"
+            );
+          }
+        });
     }
   }
 };
@@ -26,5 +52,8 @@ export default {
 <style scoped>
 .is-complete {
   text-decoration: line-through;
+}
+.icons {
+  cursor: pointer;
 }
 </style>
