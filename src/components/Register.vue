@@ -1,10 +1,10 @@
 <template>
   <div class="register-page">
-    <div class="form">
+    <div class="form" @click.prevent="submit">
       <form class="register-form">
-        <input type="text" placeholder="name" />
-        <input type="text" placeholder="email address" />
-        <input type="password" placeholder="password" />
+        <input type="text" placeholder="name" v-model="name" />
+        <input type="text" placeholder="email address" v-model="email" />
+        <input type="password" placeholder="password" v-model="password" />
         <button>create</button>
         <p class="message">
           Already registered?
@@ -17,8 +17,30 @@
 
 
 <script>
+import firebase from "firebase";
 export default {
-  name: "Register"
+  name: "Register",
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    submit() {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(data => {
+          console.log("data", data);
+          //  data.user.updateProfile({
+          //    displayName: name
+          //  });
+        })
+        .catch(err => console.log("err", err));
+    }
+  }
 };
 </script>
 
@@ -77,9 +99,6 @@ export default {
 .form .message a {
   color: #4caf50;
   text-decoration: none;
-}
-.form .register-form {
-  /* display: none; */
 }
 .container {
   position: relative;

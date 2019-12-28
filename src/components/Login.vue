@@ -1,9 +1,9 @@
 <template>
   <div class="login-page">
     <div class="form">
-      <form class="login-form">
-        <input type="text" placeholder="email" />
-        <input type="password" placeholder="password" />
+      <form class="login-form" @submit.prevent="submit">
+        <input type="text" placeholder="email" v-model="email" />
+        <input type="password" placeholder="password" v-model="password" />
         <button>login</button>
         <p class="message">
           Not registered?
@@ -16,8 +16,28 @@
 
 
 <script>
+import firebase from "firebase";
+
 export default {
-  name: "Login"
+  name: "Login",
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    submit() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(data => {
+          this.$router.replace({ name: "Dashboard" });
+          console.log("data", data);
+        })
+        .catch(err => console.log("err", err));
+    }
+  }
 };
 </script>
 

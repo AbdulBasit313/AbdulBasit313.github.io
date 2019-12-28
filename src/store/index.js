@@ -5,11 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
    state: {
-      todos: [
-         { id: 1, title: "go to gym", completed: false },
-         { id: 2, title: "buy mouse", completed: true },
-         { id: 3, title: "prepare for pandas exam", completed: false }
-      ],
+      user: {
+         loggedIn: false,
+         data: null
+      },
+      todos: [],
       newTodo: '',
       isEditing: false,
       selectedTodo: {}

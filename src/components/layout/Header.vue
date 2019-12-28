@@ -7,15 +7,27 @@
       <router-link to="/">Dashboard</router-link>
       <router-link to="/about">About</router-link>
 
-      <button class="btn">Signout</button>
+      <button class="btn" @click="signOut">Signout</button>
     </ul>
   </header>
 </template>
 
 
 <script>
+import firebase from "firebase";
 export default {
-  name: "Header"
+  name: "Header",
+  methods: {
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(data => {
+          console.log("signOut data", data);
+          this.$router.replace({ name: "Login" });
+        });
+    }
+  }
 };
 </script>
 
