@@ -18,22 +18,22 @@ export default new Vuex.Store({
    mutations: {
       ADD_TODO(state) {
          if (!state.isEditing) {
-            console.log('addTodo')
             db.collection('todos')
                .add({ title: state.newTodo, isCompleted: false })
                .catch((e) => console.log(`error =====> ${e}`));
 
-            state.todos = [...state.todos, { title: state.newTodo, isCompleted: false }]
+            // state.todos = [...state.todos, { id: document.id, title: state.newTodo, isCompleted: false }]
             state.newTodo = ''
             state.isEditing = false
          }
          else {
-            console.log('in else')
             state.selectedTodo.title = state.newTodo
 
             db.collection('todos')
                .doc(state.selectedTodo.id)
-               .update({ title: state.newTodo })
+               .update({
+                  title: state.newTodo
+               })
                .catch((e) => console.log(`error =====> ${e}`));
 
             state.newTodo = ''
@@ -49,10 +49,9 @@ export default new Vuex.Store({
             .delete()
             .catch((e) => console.log(`error =====> ${e}`));
 
-         state.todos = state.todos.filter(item => item.id !== id);
+         // state.todos = state.todos.filter(item => item.id !== id);
       },
-      async EDIT_TODO(state, todo) {
-         console.log('edit todo')
+      EDIT_TODO(state, todo) {
 
          let findingTodo = state.todos.find(item => {
             return item.title == todo.title
@@ -60,7 +59,6 @@ export default new Vuex.Store({
          state.selectedTodo = findingTodo
          state.newTodo = state.selectedTodo.title
          state.isEditing = true
-
       }
    },
    actions: {

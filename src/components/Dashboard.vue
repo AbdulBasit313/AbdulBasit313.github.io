@@ -26,26 +26,36 @@ export default {
     isLoggedIn() {
       return this.$store.state.user;
     },
-    //  change its position
     todos() {
       return this.$store.state.todos;
     }
   },
   created() {
-    db.collection("todos")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-         //  console.log("doc", doc.data());
-         //  console.log("doc", doc.id);
-          const data = {
-            id: doc.id,
-            title: doc.data().title,
-            isCompleted: doc.data().isCompleted
-          };
-          this.$store.state.todos.push(data);
+    db.collection("todos").onSnapshot(snap => {
+      this.$store.state.todos = [];
+      snap.forEach(doc => {
+        this.$store.state.todos.push({
+          id: doc.id,
+          title: doc.data().title,
+          isCompleted: doc.data().isCompleted
         });
       });
+    });
+
+    //  db.collection("todos")
+    //    .get()
+    //    .then(querySnapshot => {
+    //      querySnapshot.forEach(doc => {
+    //        //  console.log("doc", doc.data());
+    //        //  console.log("doc", doc.id);
+    //        const data = {
+    //          id: doc.id,
+    //          title: doc.data().title,
+    //          isCompleted: doc.data().isCompleted
+    //        };
+    //        this.$store.state.todos.push(data);
+    //      });
+    //    });
   }
 };
 </script>
@@ -54,7 +64,7 @@ export default {
 <style scoped>
 .app {
   /* height: 100vh; */
-  /* background-color: rgb(250, 250, 250); */
+  background-color: transparent;
 }
 .dashboard {
   background-color: rgb(240, 240, 240);
