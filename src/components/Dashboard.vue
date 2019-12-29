@@ -36,8 +36,8 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          console.log("doc", doc.data());
-          console.log("doc", doc.id);
+         //  console.log("doc", doc.data());
+         //  console.log("doc", doc.id);
           const data = {
             id: doc.id,
             title: doc.data().title,
@@ -53,8 +53,8 @@ export default {
 
 <style scoped>
 .app {
-  height: 100vh;
-  background-color: rgb(250, 250, 250);
+  /* height: 100vh; */
+  /* background-color: rgb(250, 250, 250); */
 }
 .dashboard {
   background-color: rgb(240, 240, 240);
