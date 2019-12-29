@@ -13,7 +13,7 @@
 import Header from "./layout/Header";
 import TodoList from "./TodoList";
 import AddForm from "./AddForm";
-import db from "./firebaseInit";
+import firebase from "firebase";
 
 export default {
   name: "Dashboard",
@@ -23,39 +23,39 @@ export default {
     TodoList
   },
   computed: {
-    isLoggedIn() {
-      return this.$store.state.user;
-    },
     todos() {
       return this.$store.state.todos;
     }
   },
-  created() {
-    db.collection("todos").onSnapshot(snap => {
-      this.$store.state.todos = [];
-      snap.forEach(doc => {
-        this.$store.state.todos.push({
-          id: doc.id,
-          title: doc.data().title,
-          isCompleted: doc.data().isCompleted
+  methods: {
+    async getTodos(id) {
+      let todoRef = await firebase
+        .firestore()
+        .collection("users")
+        .doc(id)
+        .collection("todos");
+
+      todoRef.onSnapshot(snap => {
+        this.$store.state.todos = [];
+        snap.forEach(doc => {
+          let data = {
+            id: doc.id,
+            title: doc.data().title,
+            isCompleted: doc.data().isCompleted
+          };
+          this.$store.state.todos.push(data);
         });
       });
-    });
+    }
+  },
 
-    //  db.collection("todos")
-    //    .get()
-    //    .then(querySnapshot => {
-    //      querySnapshot.forEach(doc => {
-    //        //  console.log("doc", doc.data());
-    //        //  console.log("doc", doc.id);
-    //        const data = {
-    //          id: doc.id,
-    //          title: doc.data().title,
-    //          isCompleted: doc.data().isCompleted
-    //        };
-    //        this.$store.state.todos.push(data);
-    //      });
-    //    });
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("created: user ", user);
+        this.getTodos(user.uid);
+      }
+    });
   }
 };
 </script>
@@ -63,7 +63,6 @@ export default {
 
 <style scoped>
 .app {
-  /* height: 100vh; */
   background-color: transparent;
 }
 .dashboard {

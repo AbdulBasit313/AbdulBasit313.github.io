@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import db from "../components/firebaseInit";
+import firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -16,25 +16,39 @@ export default new Vuex.Store({
       selectedTodo: {}
    },
    mutations: {
+      SET_LOGGED_IN(state, value) {
+         state.user.loggedIn = value;
+      },
+
+      SET_USER(state, data) {
+         state.user.data = data;
+      },
+
       ADD_TODO(state) {
          if (!state.isEditing) {
-            db.collection('todos')
-               .add({ title: state.newTodo, isCompleted: false })
-               .catch((e) => console.log(`error =====> ${e}`));
+            firebase.firestore()
+               .collection('users')
+               .doc(firebase.auth().currentUser.uid)
+               .collection('todos')
+               .add({
+                  title: state.newTodo,
+                  createdAt: new Date(),
+                  isCompleted: false
+               })
 
-            // state.todos = [...state.todos, { id: document.id, title: state.newTodo, isCompleted: false }]
             state.newTodo = ''
             state.isEditing = false
          }
          else {
             state.selectedTodo.title = state.newTodo
-
-            db.collection('todos')
+            firebase.firestore()
+               .collection('users')
+               .doc(firebase.auth().currentUser.uid)
+               .collection('todos')
                .doc(state.selectedTodo.id)
                .update({
-                  title: state.newTodo
+                  title: state.newTodo,
                })
-               .catch((e) => console.log(`error =====> ${e}`));
 
             state.newTodo = ''
             state.isEditing = false
@@ -43,14 +57,16 @@ export default new Vuex.Store({
       updateTodos(state, newTodo) {
          state.newTodo = newTodo
       },
+
       DEL_TODO(state, id) {
-         db.collection('todos')
+         firebase.firestore()
+            .collection('users')
+            .doc(firebase.auth().currentUser.uid)
+            .collection('todos')
             .doc(id)
             .delete()
-            .catch((e) => console.log(`error =====> ${e}`));
-
-         // state.todos = state.todos.filter(item => item.id !== id);
       },
+
       EDIT_TODO(state, todo) {
 
          let findingTodo = state.todos.find(item => {
@@ -62,6 +78,18 @@ export default new Vuex.Store({
       }
    },
    actions: {
+      fetchUser({ commit }, user) {
+         commit("SET_LOGGED_IN", user !== null);
+         if (user) {
+            commit("SET_USER", {
+               displayName: user.displayName,
+               email: user.email
+            });
+         } else {
+            commit("SET_USER", null);
+         }
+      },
+
       addTodo({ commit }) {
          commit('ADD_TODO')
       },
@@ -74,5 +102,10 @@ export default new Vuex.Store({
    },
    modules: {
 
+   },
+   getters: {
+      user(state) {
+         return state.user
+      }
    },
 })

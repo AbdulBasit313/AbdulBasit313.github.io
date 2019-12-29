@@ -27,13 +27,20 @@ export default {
       password: ""
     };
   },
+  computed: {
+    //  currentUser() {
+    //    return this.$store.state.user;
+    //  }
+  },
   methods: {
     submit() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(data => {
-          console.log("data", data);
+          //  this.currentUser.uid = data.user.uid;
+          console.log("CURRENT USER", data.user.uid);
+          this.$router.replace({ name: "Dashboard" });
           //  data.user.updateProfile({
           //    displayName: name
           //  });
