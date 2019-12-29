@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '../components/Dashboard.vue'
-import Login from '../components/Login.vue'
-import Register from '../components/Register.vue'
-import About from '../components/About.vue'
+import Dashboard from '../components/pages/Dashboard.vue'
+import Login from '../components/pages/Login.vue'
+import Register from '../components/pages/Register.vue'
+import About from '../components/pages/About.vue'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -15,12 +15,18 @@ const router = new Router({
       {
          path: '/login',
          name: 'Login',
-         component: Login
+         component: Login,
+         meta: {
+            requiresGuest: true
+         }
       },
       {
          path: '/register',
          name: 'Register',
-         component: Register
+         component: Register,
+         meta: {
+            requiresGuest: true
+         }
       },
       {
          path: '/',
@@ -41,15 +47,29 @@ const router = new Router({
    ]
 })
 
+// nav guard
 router.beforeEach((to, from, next) => {
-   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
    const currentUser = firebase.auth().currentUser
 
    if (requiresAuth && !currentUser) {
-      next('/login')
-   } else if (requiresAuth && currentUser) {
-      next()
-   } else {
+      next({
+         path: '/login',
+         query: {
+            redirect: to.fullPath
+         }
+      })
+   }
+   else if (requiresGuest && currentUser) {
+      next({
+         path: '/',
+         query: {
+            redirect: to.fullPath
+         }
+      })
+   }
+   else {
       next()
    }
 })

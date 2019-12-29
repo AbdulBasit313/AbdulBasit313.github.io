@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <div class="form">
-      <form class="login-form" @submit.prevent="submit">
+      <form class="login-form" @submit.prevent="login">
         <input type="text" placeholder="email" v-model="email" />
         <input type="password" placeholder="password" v-model="password" />
         <button>login</button>
@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      err: ""
     };
   },
   computed: {
@@ -32,17 +33,21 @@ export default {
     //  }
   },
   methods: {
-    submit() {
+    login() {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(data => {
-          //  this.currentUser.uid = data.user.uid;
-          console.log("CURRENT USER", data.user.uid);
-          this.$router.replace({ name: "Dashboard" });
-          console.log("data", data);
-        })
-        .catch(err => console.log("err", err));
+        .then(
+          data => {
+            //  this.currentUser.uid = data.user.uid;
+            console.log("CURRENT USER", data.user.uid);
+            this.$router.replace({ name: "Dashboard" });
+            console.log("data", data);
+          },
+          err => {
+            console.log("error", err.message);
+          }
+        );
     }
   }
 };

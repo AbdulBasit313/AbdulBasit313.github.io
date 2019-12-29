@@ -91,12 +91,7 @@ a {
   padding-bottom: 0.5em;
   border: 1px solid #a2a2a2;
   background-color: #f4f4f4;
-  -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
-  /* -webkit-border-radius: 5px; */
-  /* -moz-border-radius: 5px; */
-  /* border-radius: 5px; */
 }
 
 .btn {
@@ -130,12 +125,6 @@ a {
   .header {
     flex-direction: column;
     align-items: center;
-
-    /* .header {
-      width: 80%;
-      margin: 0 auto;
-      max-width: 1150px;
-    } */
   }
 }
 

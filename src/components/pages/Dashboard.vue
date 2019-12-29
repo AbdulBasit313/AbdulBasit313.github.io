@@ -10,9 +10,9 @@
 
 
 <script>
-import Header from "./layout/Header";
-import TodoList from "./TodoList";
-import AddForm from "./AddForm";
+import Header from "../layout/Header";
+import TodoList from "../TodoList";
+import AddForm from "../AddForm";
 import firebase from "firebase";
 
 export default {
@@ -50,12 +50,7 @@ export default {
   },
 
   created() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log("created: user ", user);
-        this.getTodos(user.uid);
-      }
-    });
+    this.getTodos(firebase.auth().currentUser.uid);
   }
 };
 </script>

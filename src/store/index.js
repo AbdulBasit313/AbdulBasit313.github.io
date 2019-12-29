@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
    state: {
+      // not in use
       user: {
          loggedIn: false,
          data: null
@@ -16,10 +17,11 @@ export default new Vuex.Store({
       selectedTodo: {}
    },
    mutations: {
+      // not in use
       SET_LOGGED_IN(state, value) {
          state.user.loggedIn = value;
       },
-
+      // not in use
       SET_USER(state, data) {
          state.user.data = data;
       },
@@ -78,6 +80,7 @@ export default new Vuex.Store({
       }
    },
    actions: {
+      // not in use
       fetchUser({ commit }, user) {
          commit("SET_LOGGED_IN", user !== null);
          if (user) {
@@ -103,6 +106,7 @@ export default new Vuex.Store({
    modules: {
 
    },
+   // not in use
    getters: {
       user(state) {
          return state.user

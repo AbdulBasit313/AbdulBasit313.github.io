@@ -1,6 +1,6 @@
 <template>
   <div class="register-page">
-    <div class="form" @click.prevent="submit">
+    <div class="form" @click.prevent="register">
       <form class="register-form">
         <input type="text" placeholder="name" v-model="name" />
         <input type="text" placeholder="email address" v-model="email" />
@@ -33,18 +33,23 @@ export default {
     //  }
   },
   methods: {
-    submit() {
+    register() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
-        .then(data => {
-          //  this.currentUser.uid = data.user.uid;
-          console.log("CURRENT USER", data.user.uid);
-          this.$router.replace({ name: "Dashboard" });
-          //  data.user.updateProfile({
-          //    displayName: name
-          //  });
-        })
+        .then(
+          data => {
+            //  this.currentUser.uid = data.user.uid;
+            console.log("CURRENT USER", data.user.uid);
+            this.$router.replace({ name: "Dashboard" });
+            //  data.user.updateProfile({
+            //    displayName: name
+            //  });
+          },
+          err => {
+            console.log("error", err.message);
+          }
+        )
         .catch(err => console.log("err", err));
     }
   }
