@@ -27,6 +27,7 @@ export default new Vuex.Store({
       },
 
       ADD_TODO(state) {
+         console.log('add')
          if (!state.isEditing) {
             firebase.firestore()
                .collection('users')

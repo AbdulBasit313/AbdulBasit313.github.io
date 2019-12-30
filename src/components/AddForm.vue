@@ -1,9 +1,38 @@
 <template>
-  <form @submit.prevent="$store.dispatch('addTodo')">
-    <input type="text" v-model="newTodo" name="newTodo" placeholder="Prioritize your task!" />
-    <button v-bind:disabled="newTodo.trim().length<=0" v-if="!appMode" class="add-btn">Add</button>
-    <button v-bind:disabled="newTodo.trim().length<=0" v-else class="add-btn">Edit</button>
-  </form>
+  <div>
+    <div>
+      <b-form
+        class="justify-content-center"
+        @submit.prevent="$store.dispatch('addTodo')"
+        inline
+        v-if="show"
+      >
+        <b-input
+          v-model="newTodo"
+          type="text"
+          name="newTodo"
+          id="inline-form-input-name"
+          class="mb-2 mr-sm-2 mb-sm-0"
+          placeholder="Prioritize your day!"
+        ></b-input>
+
+        <b-button
+          @click="$store.dispatch('addTodo')"
+          class="add-btn"
+          variant="primary"
+          v-bind:disabled="newTodo.trim().length<=0"
+          v-if="!appMode"
+        >Add</b-button>
+        <b-button
+          @click="$store.dispatch('addTodo')"
+          class="add-btn"
+          variant="primary"
+          v-bind:disabled="newTodo.trim().length<=0"
+          v-else
+        >Edit</b-button>
+      </b-form>
+    </div>
+  </div>
 </template> 
 
 
@@ -11,6 +40,11 @@
 export default {
   name: "AddForm",
   props: ["todos"],
+  data() {
+    return {
+      show: true
+    };
+  },
   computed: {
     appMode() {
       return this.$store.state.isEditing;
@@ -29,35 +63,15 @@ export default {
 
 
 <style scoped>
-input {
-  padding: 4px;
-  margin-right: 5px;
-  font-size: 1.2rem;
-  border: 1px solid #ccc;
-}
-
-.add-btn {
-  display: inline-block;
-  background: var(--light-color);
-  color: #333;
-  padding: 0.4rem 1.3rem;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: opacity 0.2s ease-in;
-  outline: none;
-  font-size: 0.8rem;
-  padding: 0.5rem 1rem;
-  margin-right: 0.2rem;
-  background: #333333;
-  color: #fff;
-}
-
 button:disabled,
 button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
+}
+
+.form-inline .form-control {
+  width: 75%;
+  padding: 20px;
 }
 </style>

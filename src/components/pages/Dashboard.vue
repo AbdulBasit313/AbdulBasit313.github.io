@@ -2,6 +2,7 @@
   <div class="app">
     <Header />
     <div class="dashboard">
+      <div class="title">YOUR LIST</div>
       <AddForm v-bind:todos="todos" />
       <TodoList v-bind:todos="todos" />
     </div>
@@ -60,12 +61,24 @@ export default {
 .app {
   background-color: transparent;
 }
+
+.title {
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 20px;
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 10px;
+}
+
 .dashboard {
   background-color: rgb(240, 240, 240);
   box-shadow: 0px 0px 10px grey;
   width: 460px;
-  padding: 46px;
+  padding-bottom: 10px;
   margin: 0 auto;
   margin-top: 60px;
+  margin-bottom: 60px;
 }
 </style>

@@ -1,16 +1,22 @@
 <template>
-  <div class="register-page">
-    <div class="form" @click.prevent="register">
-      <form class="register-form">
-        <input type="text" placeholder="name" v-model="name" />
-        <input type="text" placeholder="email address" v-model="email" />
-        <input type="password" placeholder="password" v-model="password" />
-        <button>create</button>
-        <p class="message">
-          Already registered?
-          <router-link to="/login">Sign In</router-link>
-        </p>
-      </form>
+  <div>
+    <Header />
+    <div class="register-page">
+      <div class="form">
+        <form class="register-form" @submit.prevent="register">
+          <input type="text" placeholder="name" v-model="name" />
+          <input type="text" placeholder="email address" v-model="email" />
+          <input type="password" placeholder="password" v-model="password" />
+          <button v-if="!showLoading">create</button>
+          <div v-if="showLoading" class="spinner">
+            <b-spinner variant="light" label="Spinning"></b-spinner>
+          </div>
+          <p class="message">
+            Already registered?
+            <router-link to="/login">Sign In</router-link>
+          </p>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -18,39 +24,37 @@
 
 <script>
 import firebase from "firebase";
+import Header from "../layout/Header";
+
 export default {
   name: "Register",
+  components: {
+    Header
+  },
   data() {
     return {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      showLoading: false
     };
-  },
-  computed: {
-    //  currentUser() {
-    //    return this.$store.state.user;
-    //  }
   },
   methods: {
     register() {
+      this.showLoading = true;
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
-          data => {
-            //  this.currentUser.uid = data.user.uid;
-            console.log("CURRENT USER", data.user.uid);
+          () => {
             this.$router.replace({ name: "Dashboard" });
-            //  data.user.updateProfile({
-            //    displayName: name
-            //  });
           },
           err => {
+            this.showLoading = false;
+            alert(err.message);
             console.log("error", err.message);
           }
-        )
-        .catch(err => console.log("err", err));
+        );
     }
   }
 };
@@ -97,6 +101,14 @@ export default {
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
+}
+.spinner {
+  background: #4caf50;
+  width: 100%;
+  border: 0;
+  padding: 10px;
+  color: #ffffff;
+  font-size: 14px;
 }
 .form button:hover,
 .form button:active,

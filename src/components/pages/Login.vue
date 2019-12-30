@@ -1,15 +1,21 @@
 <template>
-  <div class="login-page">
-    <div class="form">
-      <form class="login-form" @submit.prevent="login">
-        <input type="text" placeholder="email" v-model="email" />
-        <input type="password" placeholder="password" v-model="password" />
-        <button>login</button>
-        <p class="message">
-          Not registered?
-          <router-link to="/register">Create an account</router-link>
-        </p>
-      </form>
+  <div>
+    <Header />
+    <div class="login-page">
+      <div class="form">
+        <form class="login-form" @submit.prevent="login">
+          <input type="text" placeholder="email" v-model="email" />
+          <input type="password" placeholder="password" v-model="password" />
+          <button v-if="!showLoading">login</button>
+          <div v-if="showLoading" class="spinner">
+            <b-spinner variant="light" label="Spinning"></b-spinner>
+          </div>
+          <p class="message">
+            Not registered?
+            <router-link to="/register">Create an account</router-link>
+          </p>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -17,37 +23,35 @@
 
 <script>
 import firebase from "firebase";
+import Header from "../layout/Header";
 
 export default {
   name: "Login",
+  components: {
+    Header
+  },
   data() {
     return {
       email: "",
       password: "",
-      err: ""
+      err: "",
+      showLoading: false
     };
-  },
-  computed: {
-    //  currentUser() {
-    //    return this.$store.state.user;
-    //  }
   },
   methods: {
     login() {
+      this.showLoading = true;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          data => {
-            //  this.currentUser.uid = data.user.uid;
-            console.log("CURRENT USER", data.user.uid);
-            this.$router.replace({ name: "Dashboard" });
-            console.log("data", data);
-          },
-          err => {
-            console.log("error", err.message);
-          }
-        );
+        .then(() => {
+          this.$router.replace({ name: "Dashboard" });
+        });
+      err => {
+        this.showLoading = false;
+        alert(err.message);
+        console.log("error", err.message);
+      };
     }
   }
 };
@@ -99,6 +103,14 @@ export default {
 .form button:active,
 .form button:focus {
   background: #43a047;
+}
+.spinner {
+  background: #4caf50;
+  width: 100%;
+  border: 0;
+  padding: 10px;
+  color: #ffffff;
+  font-size: 14px;
 }
 .form .message {
   margin: 15px 0 0;
