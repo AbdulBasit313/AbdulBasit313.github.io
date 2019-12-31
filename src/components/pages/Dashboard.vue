@@ -81,4 +81,11 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
+
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .dashboard {
+    width: 280px;
+  }
+}
 </style>
