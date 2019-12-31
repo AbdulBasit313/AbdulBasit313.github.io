@@ -44,14 +44,15 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          this.$router.replace({ name: "Dashboard" });
-        });
-      err => {
-        this.showLoading = false;
-        alert(err.message);
-        console.log("error", err.message);
-      };
+        .then(
+          () => {
+            this.$router.replace({ name: "Dashboard" });
+          },
+          err => {
+            this.showLoading = false;
+            alert(err.message);
+          }
+        );
     }
   }
 };
