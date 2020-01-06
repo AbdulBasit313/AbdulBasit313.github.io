@@ -74,4 +74,14 @@ button[disabled] {
   width: 75%;
   padding: 20px;
 }
+
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  button {
+    margin-left: 10px;
+  }
+  .form-inline {
+    align-items: baseline;
+  }
+}
 </style>

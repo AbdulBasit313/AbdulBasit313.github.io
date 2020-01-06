@@ -1,13 +1,13 @@
 <template>
   <header class="header">
     <div>
-      <b-navbar toggleable="lg" type="dark" variant="dark">
+      <b-navbar toggleable="md" type="dark" variant="dark">
         <b-navbar-brand href="#">PWA TODO LIST</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
             <b-navbar-nav right>
-              <span style="color: wheat; margin: 8px 20px;" v-if="isLoggedIn">{{currentUser}}</span>
+              <span class="email-style" v-if="isLoggedIn">{{currentUser}}</span>
               <b-link class="nav-link" to="/" v-if="isLoggedIn">Dashboard</b-link>
               <b-link class="nav-link" to="/about" v-if="isLoggedIn">About</b-link>
               <b-link class="nav-link" to="/login" v-if="!isLoggedIn">Login</b-link>
@@ -51,3 +51,20 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.email-style {
+  color: wheat;
+  margin: 8px 20px;
+}
+@media (max-width: 575.98px) {
+  .email-style {
+    margin: 0;
+  }
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .email-style {
+    margin: 0;
+  }
+}
+</style>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import firebase from 'firebase'
 import 'firebase/firestore'
+import './registerServiceWorker';
 import firebaseConfig from './components/firebaseConfig'
 import BootstrapVue from 'bootstrap-vue'
 import store from './store'
